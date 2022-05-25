@@ -2,7 +2,6 @@
 using TeamsAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using TeamsAPI.DAL;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace TeamsAPI.Repositories
 {
@@ -57,9 +56,13 @@ namespace TeamsAPI.Repositories
         //Update a player
         public async Task<Player> UpdatePlayerAsync(int id, Player player)
         {
-            if (GetAll().Any(x => x.id == id))
+            var savedPlayer = GetAll().Where(x => x.id == id).FirstOrDefault();
+            if (savedPlayer != null)
             {
-                return await UpdateAsync(player);
+                savedPlayer.firstName = player.firstName;
+                savedPlayer.lastName = player.lastName;
+                savedPlayer.Teamid = player.Teamid;
+                return await UpdateAsync(savedPlayer);
             }
             else
             {

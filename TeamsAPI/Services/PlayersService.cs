@@ -56,26 +56,34 @@ namespace TeamsAPI.Services
                     }
                     else
                     {
-                        return null;
+                        throw new BadHttpRequestException("Player can not be updated. Team specified already has 8 players.");
                     }
                 }
             }
             else
             {
-                return null;
+                throw new BadHttpRequestException("Player specified does not exist.");
             }
         }
         //Add a player. Ensure the target team has less than 8 players
         public async Task<Player> AddPlayerAsync(Player player)
         {
-            int playerCount = playersRepo.GetAll().Where(x => x.Teamid == player.Teamid).Count();
-            if(playerCount < 8)
+            var playerCheck = playersRepo.GetAll().Where(x => x.firstName == player.firstName).Where(x => x.lastName == player.lastName).FirstOrDefault();
+            if (playerCheck == null)
             {
-                return await playersRepo.AddAsync(player);
+                int playerCount = playersRepo.GetAll().Where(x => x.Teamid == player.Teamid).Count();
+                if (playerCount < 8)
+                {
+                    return await playersRepo.AddAsync(player);
+                }
+                else
+                {
+                    throw new BadHttpRequestException("Specified team already has 8 players.");
+                }
             }
             else
             {
-                return null;
+                throw new BadHttpRequestException("Player already exists.");
             }
         }
         //Delete a player

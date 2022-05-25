@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TeamsAPI.Models
 {
-    [Index(nameof(name), IsUnique = true), Index(nameof(location), IsUnique = true)]
+    [Index("name", "location", IsUnique = true, Name = "IX_NameAndLocation")]
     public class Team
     {
         [Key]

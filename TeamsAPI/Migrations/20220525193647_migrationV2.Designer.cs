@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamsAPI.DAL;
 
@@ -10,9 +11,10 @@ using TeamsAPI.DAL;
 namespace TeamsAPI.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220525193647_migrationV2")]
+    partial class migrationV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,18 +36,15 @@ namespace TeamsAPI.Migrations
 
                     b.Property<string>("firstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("lastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
                     b.HasIndex("Teamid");
-
-                    b.HasIndex(new[] { "firstName", "lastName" }, "IX_FirstAndLastName")
-                        .IsUnique();
 
                     b.ToTable("Players");
                 });

@@ -42,7 +42,7 @@ namespace TeamsAPI.Repositories
                 }
                 else
                 {
-                    return null;
+                    throw new BadHttpRequestException("Invalid Order By. Supported Order Bys: name, location");
                 }
                 
             }

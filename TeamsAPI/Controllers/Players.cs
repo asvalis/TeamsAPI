@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamsAPI.Models;
 using TeamsAPI.Services.Interfaces;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace TeamsAPI.Controllers
 {
@@ -30,7 +29,14 @@ namespace TeamsAPI.Controllers
                 }
                 else
                 {
-                    return BadRequest();
+                    if (id != null || lastName != null || teamId != null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
             }
             else
@@ -44,14 +50,25 @@ namespace TeamsAPI.Controllers
         {
             if (playersService != null)
             {
-                var updatedPlayer = await playersService.UpdatePlayer(id, player);
-
-                if (updatedPlayer == null)
+                if (player.firstName != null && player.lastName != null && player.Teamid != 0)
                 {
-                    return NotFound();
+                    var updatedPlayer = await playersService.UpdatePlayer(id, player);
+
+                    if (updatedPlayer == null)
+                    {
+                        return NotFound();
+
+                    }
+                    else
+                    {
+                        return Ok(updatedPlayer);
+                    }
 
                 }
-                return Ok(updatedPlayer);
+                else
+                {
+                    return BadRequest("Missing required fields.");
+                }
             }
             else
             {
@@ -78,7 +95,7 @@ namespace TeamsAPI.Controllers
             }
             else
             {
-                return Problem("OrderService  is null.");
+                return Problem("Service 'PlayerService' is null.");
             }
         }
         // DELETE
@@ -87,7 +104,7 @@ namespace TeamsAPI.Controllers
         {
             if (playersService == null)
             {
-                return Problem("OrderService is null.");
+                return Problem("Service 'PlayerService' is null.");
             }
             var player = await playersService.DeletePlayerAsync(id);
             if (player == null)

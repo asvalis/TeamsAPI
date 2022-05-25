@@ -1,6 +1,7 @@
 ﻿using TeamsAPI.Models;
 using TeamsAPI.Repositories.Interfaces;
 using TeamsAPI.Services.Interfaces;
+
 namespace TeamsAPI.Services
 {
     public class TeamsService : ITeamsService
@@ -26,13 +27,28 @@ namespace TeamsAPI.Services
         //Add a team
         public async Task<Team> AddTeamAsync(Team newTeam)
         {
-            if (newTeam.players.Count() < 8)
+            if (newTeam.name != null && newTeam.location != null)
             {
-                return await teamsRepo.AddAsync(newTeam);
+                var teamCheck = teamsRepo.GetAll().Where(x => x.name == newTeam.name).Where(x => x.location == newTeam.location).FirstOrDefault();
+                if (teamCheck == null)
+                {
+                    if (newTeam.players.Count() <= 8)
+                    {
+                        return await teamsRepo.AddAsync(newTeam);
+                    }
+                    else
+                    {
+                        throw new BadHttpRequestException("Only 8 players per team. Selected team already has 8.");
+                    }
+                }
+                else
+                {
+                    throw new BadHttpRequestException("Team name and location already exist.");
+                }
             }
             else
             {
-                return null;
+                throw new BadHttpRequestException("Team requires a name and a location.");
             }
             
         }

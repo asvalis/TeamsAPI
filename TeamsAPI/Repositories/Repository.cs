@@ -1,5 +1,6 @@
 ﻿using TeamsAPI.Repositories.Interfaces;
 using TeamsAPI.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace TeamsAPI.Repositories
 {
@@ -74,6 +75,7 @@ namespace TeamsAPI.Repositories
 
             try
             {
+                _context.Entry(entity).State = EntityState.Modified;
                 _context.Update(entity);
                 await _context.SaveChangesAsync();
 

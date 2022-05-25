@@ -29,7 +29,7 @@ namespace TeamsAPI.Controllers
                 }
                 else
                 {
-                    return BadRequest("Not a valid Order By. Available: name, location.");
+                    return BadRequest();
                 }  
             }
             else

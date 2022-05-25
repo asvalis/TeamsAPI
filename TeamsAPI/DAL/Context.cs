@@ -1,5 +1,4 @@
 ﻿using TeamsAPI.Models;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace TeamsAPI.DAL
