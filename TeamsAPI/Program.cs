@@ -16,10 +16,10 @@ builder.Services.AddScoped<IPlayersRepo, PlayersRepo>();
 builder.Services.AddScoped<IPlayersService, PlayersService>();
 
 //SQL Server Express. I like to debug with this.
-builder.Services.AddDbContext<Context>(option => option.UseSqlServer(config.GetConnectionString("Database")));
+//builder.Services.AddDbContext<Context>(option => option.UseSqlServer(config.GetConnectionString("Database")));
 
-//In Memory
-//builder.Services.AddDbContext<Context>(option => option.UseInMemoryDatabase("TeamsDB"));
+//In Memory DB
+builder.Services.AddDbContext<Context>(option => option.UseInMemoryDatabase("TeamsDB"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
